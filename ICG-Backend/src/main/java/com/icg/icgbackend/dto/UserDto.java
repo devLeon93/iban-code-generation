@@ -9,11 +9,11 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
 
-    private String name;
+    private String username;
     private String email;
     public static UserDto fromUser(User user) {
         UserDto userView = new UserDto();
-        userView.setName(user.getName());
+        userView.setUsername(user.getUsername());
         userView.setEmail(user.getEmail());
         return userView;
     }

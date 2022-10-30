@@ -19,50 +19,36 @@ import java.util.stream.Collectors;
 public class UserCustomDetail implements UserDetails {
 
 
+    private static final String ROLE_PREFIX = "ROLE_";
     private final Long id;
     private final String username;
+    private final String email;
 
-    private final String name;
-
-    // private final String email;
     @JsonIgnore
     private final String password;
     @Setter
-    private Collection<? extends GrantedAuthority> authorities;
-
-
-
-    public UserCustomDetail(Long id, String username,String name,String password,
-                            Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.password = password;
-        this.authorities = authorities;
-    }
+    private List<GrantedAuthority> authorities = new ArrayList<>();
 
     public static UserCustomDetail build(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRole().name()))
-                .collect(Collectors.toList());
-        return new UserCustomDetail(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getPassword(),
-                authorities);
+        UserCustomDetail userCustomDetail = new UserCustomDetail(user.getId(),user.getUsername(),
+                user.getEmail(), user.getPassword());
+        final List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + user.getRoles()));
+        userCustomDetail.setAuthorities(authorities);
+        return userCustomDetail;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return Collections.unmodifiableList(authorities);
     }
+
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
     @Override

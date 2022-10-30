@@ -41,15 +41,15 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public UserDto registerUser(RegisterRequest registerUser) {
-        Optional<User> userByUsername = userRepository.findUserByEmail(registerUser.getEmail());
+        Optional<User> userByUsername = userRepository.findUserByUsername(registerUser.getEmail());
         if(userByUsername.isPresent()){
             throw new UserExistException(
-                    "The user " + registerUser.getName() + " already exist. Please check credentials");
+                    "The user " + registerUser.getUsername() + " already exist. Please check credentials");
 
         }
         User user = new User();
         user.setRoles(user.getRoles());
-        user.setName(registerUser.getName());
+        user.setUsername(registerUser.getUsername());
         user.setEmail(registerUser.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(registerUser.getPassword()));
         LOG.info("Register User {}", registerUser.getEmail());
@@ -62,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public  JWTSuccessAuthenticateResponse authenticateUser(LoginRequest authenticateUser) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authenticateUser.getEmail(), authenticateUser.getPassword()));
+                new UsernamePasswordAuthenticationToken(authenticateUser.getUsername(), authenticateUser.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtTokenProvider.generateToken(authentication);

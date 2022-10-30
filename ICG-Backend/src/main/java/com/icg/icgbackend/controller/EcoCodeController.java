@@ -19,7 +19,7 @@ public class EcoCodeController {
 
     private final EcoCodeService ecoCodeService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping
     public ResponseEntity<List<EcoCodeDto>> getAllEco(){
         List<EcoCodeDto> ecoCodeDTOS = ecoCodeService.findAllEcoCodes();

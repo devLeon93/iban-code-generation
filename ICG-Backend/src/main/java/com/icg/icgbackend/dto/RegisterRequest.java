@@ -11,7 +11,8 @@ import javax.validation.constraints.Size;
 public class RegisterRequest {
 
     @NotEmpty(message = "Please enter name")
-    private String name;
+    private String username;
+
 
     @NotEmpty(message = "Email shouldn't be empty")
     @Email(message = "Email should be valid")
