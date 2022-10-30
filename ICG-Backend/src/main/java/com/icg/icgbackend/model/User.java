@@ -1,11 +1,12 @@
 package com.icg.icgbackend.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,7 +24,7 @@ public class User extends BaseEntity {
     @Column(name = "password",nullable = false)
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
-    private Role role;
+    private Set<Role> roles = new HashSet<>();
 }
