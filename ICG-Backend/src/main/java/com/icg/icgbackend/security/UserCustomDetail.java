@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserCustomDetail implements UserDetails {
 
-
     private static final String ROLE_PREFIX = "ROLE_";
     private final Long id;
     private final String username;
@@ -30,10 +29,12 @@ public class UserCustomDetail implements UserDetails {
     private List<GrantedAuthority> authorities = new ArrayList<>();
 
     public static UserCustomDetail build(User user) {
-        UserCustomDetail userCustomDetail = new UserCustomDetail(user.getId(),user.getUsername(),
+        UserCustomDetail userCustomDetail = new UserCustomDetail(user.getId(), user.getUsername(),
                 user.getEmail(), user.getPassword());
-        final List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + user.getRoles()));
+        List<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getRole().name()))
+                .collect(Collectors.toList());
+
         userCustomDetail.setAuthorities(authorities);
         return userCustomDetail;
     }

@@ -4,7 +4,10 @@ import com.icg.icgbackend.dto.LoginRequest;
 import com.icg.icgbackend.dto.RegisterRequest;
 import com.icg.icgbackend.dto.UserDto;
 import com.icg.icgbackend.exception.UserExistException;
+import com.icg.icgbackend.model.Role;
+import com.icg.icgbackend.model.URole;
 import com.icg.icgbackend.model.User;
+import com.icg.icgbackend.repository.RoleRepository;
 import com.icg.icgbackend.repository.UserRepository;
 import com.icg.icgbackend.security.JWT.JWTTokenProvider;
 import com.icg.icgbackend.security.UserCustomDetail;
@@ -34,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
     public static final Logger LOG = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JWTTokenProvider jwtTokenProvider;
@@ -47,8 +51,10 @@ public class AuthServiceImpl implements AuthService {
                     "The user " + registerUser.getUsername() + " already exist. Please check credentials");
 
         }
+
+        Role defaultRole = roleRepository.findByRole(URole.ADMIN);
         User user = new User();
-        user.setRoles(user.getRoles());
+        user.getRoles().add(defaultRole);
         user.setUsername(registerUser.getUsername());
         user.setEmail(registerUser.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(registerUser.getPassword()));
@@ -67,10 +73,10 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtTokenProvider.generateToken(authentication);
 
-        UserCustomDetail userDetails = (UserCustomDetail) authentication.getPrincipal();
+       /* UserCustomDetail userDetails = (UserCustomDetail) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
         return new JWTSuccessAuthenticateResponse(
                 token
         );

@@ -1,5 +1,5 @@
 const AdminPage = () => {
-    return(<p>AdminPage</p>)
+    return(<p>Admin Dashboard</p>)
 };
 
 export {AdminPage}

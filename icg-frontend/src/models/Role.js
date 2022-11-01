@@ -1,0 +1,6 @@
+export const Role = {
+
+    ADMIN: 'ADMIN',
+    OPERATOR:'OPERATOR',
+    OPERATOR_REGION:'OPERATOR_RAION'
+}
