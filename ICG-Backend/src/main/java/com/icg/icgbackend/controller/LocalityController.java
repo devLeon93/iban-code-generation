@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/locality")
@@ -26,17 +28,30 @@ public class LocalityController {
         return new ResponseEntity<>(localityDTOList, HttpStatus.OK);
     }
 
-    @GetMapping("/regions")
+   /* @GetMapping("/regions")
     public ResponseEntity<List<LocalityDto>> getRegions(){
         List<LocalityDto> regions = localityService.findRegions();
         return new ResponseEntity<>(regions,HttpStatus.OK);
+    }*/
+
+    @GetMapping("/regions")
+    public ResponseEntity<List<LocalityDto>> getRegions() {
+
+        var map = new HashMap<String, LocalityDto>();
+        localityService
+                .findRegions()
+                .forEach(item ->
+                        map.put(item.getLocalityCode(), item));
+
+        return new ResponseEntity<>(map.entrySet().stream()
+                .map(item -> item.getValue())
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
-
     @GetMapping("/{cdc}")
-    public ResponseEntity<List<LocalityDto>> getLocalitiesByCode(@PathVariable("cdc") String cdc){
+    public ResponseEntity<List<LocalityDto>> getLocalitiesByCode(@PathVariable("cdc") String cdc) {
         List<LocalityDto> localities = localityService.findLocalityByCode(cdc);
-        return new ResponseEntity<>(localities,HttpStatus.OK);
+        return new ResponseEntity<>(localities, HttpStatus.OK);
     }
 
 }

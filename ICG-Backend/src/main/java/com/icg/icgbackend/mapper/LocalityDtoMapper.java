@@ -13,6 +13,7 @@ public class LocalityDtoMapper {
 
         final LocalityDto localityDTO = new LocalityDto();
         localityDTO.setLocalityCode(locality.getLocalityCode());
+        localityDTO.setParentLocalityCode(locality.getParentLocalityCode());
         localityDTO.setLocalityTitle(locality.getLocalityTitle());
         return localityDTO;
     }

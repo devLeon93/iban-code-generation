@@ -6,7 +6,7 @@ import lombok.Data;
 public class LocalityDto {
 
     private String localityCode;
-
+    private String parentLocalityCode;
     private String localityTitle;
 }
 

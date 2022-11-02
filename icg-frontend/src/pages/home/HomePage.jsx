@@ -1,54 +1,170 @@
-
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import Select from 'react-select'
+import axios from "axios";
+import {map} from "react-bootstrap/ElementChildren";
+
+const HomePage = () => {
+
+    const years = [...Array(22).keys()]
+        .map((year,index)=>({ label: year + 2000, value: year + 2000 }))
+
+    const [eco, setEco] = useState(null);
+    const [region, setRegion] = useState(null);
+    const [vil, setVil] = useState(null);
+    const[iban, setIban] = useState(null);
+
+    const [ecoSelect, setEcoSelect] = useState(null);
+    const [regionSelect, setRegionSelect] = useState(null);
+    const [vilSelect, setVilSelect] = useState(null);
 
 
-const years = [{value: '2017', label: '2017'}, {value: '2018', label: '2018'}, {
-    value: '2019',
-    label: '2019'
-}, {value: '2020', label: '2020'}, {value: '2021', label: '2021'}, {value: '2022', label: '2022'},]
+    const getEcoCodes = () => {
+        axios.get("http://localhost:8080/api/eco")
+            .then((response) => {
+                setEco(response.data.map(item => ({
+                        value: item.code,
+                        label: item.label
+                    }))
+                        .map(item => ({
+                            value: item.value,
+                            label: `${item.value} - ${item.label}`
+                        }))
+                        .sort((a, b) => a.value.localeCompare(b.value))
+                )
+            }).catch((error) => {
+            console.log(error)
+        })
+    }
 
-const HomePage = () => (
+    const getRegions = () => {
+        axios.get("http://localhost:8080/api/locality/regions")
+            .then((response) => {
+                setRegion(response.data.map(item => ({
+                        value: item.localityCode,
+                        label: item.localityTitle
+                    }))
+                        .map(item => ({
+                            value: item.value,
+                            label: `${item.value} - ${item.label}`
+                        }))
+                        .sort((a, b) => a.value.localeCompare(b.value))
+                )
+            }).catch((err) => {
+            console.log(err)
+        })
+    }
 
-    <div className="container">
-        <h3 className="col-md-8 text-center mt-5 mb-xxl-5">Generarea Codului IBAN</h3>
+
+    useEffect(() => {
+        return getEcoCodes(),getRegions()
+    }, []);
+
+    const handleVillage =(code)=>{
+        if(code) {
+            axios.get(`http://localhost:8080/api/locality/${code}`)
+                .then((res) => {
+                    console.log(res.data)
+                    setVil(res.data.map((item) => ({
+                            value: item.parentLocalityCode,
+                            label: item.localityTitle
+                        }))
+                            .filter((vil) => !vil.label.startsWith("Raio"))
+                            .map((item)=>({
+                                value: item.value,
+                                label: `${item.value} - ${item.label}`
+                            }))
+                    )
+                }).catch((err) => {
+                console.log(err)
+            });
+        }
+    }
+
+
+
+    const handleCall =()=>{
+        if(ecoSelect && regionSelect && vilSelect) {
+            axios.get(`http://localhost:8080/api/iban/${ecoSelect}/${regionSelect}/${vilSelect}`)
+                .then((res) => {
+                    console.log(res.data);
+                    setIban(res.data);
+                }).catch((err) => {
+                console.log(err)
+            });
+        }
+    }
+
+    return <div className="container">
+        <h3 className="col-md-15 text-center mt-5 mb-xxl-5">Generarea Codului IBAN</h3>
         <form>
             <div className="form-group ">
 
                 <div className="row">
                     <label htmlFor="anul" className="col-sm-2 col-form-label">Anul:</label>
-                    <div className="col-sm-4">
+                    <div className="col-sm-5">
                         <Select className="sel" options={years}/>
                     </div>
                 </div>
 
                 <div className="row mt-4">
                     <label htmlFor="codulEco" className="col-sm-2 col-form-label">Codul Eco:</label>
-                    <div className="col-sm-4">
-                        <Select className="sel" options={years}/>
+                    <div className="col-sm-5">
+                        <Select className="sel"
+                                options={eco}
+                                onChange={(e) => {
+
+                                    setEcoSelect(e.value)
+                                }
+                                }/>
                     </div>
                 </div>
 
                 <div className="row mt-4">
                     <label htmlFor="raionul" className="col-sm-2 col-form-label">Raionul:</label>
-                    <div className="col-sm-4">
-                        <Select className="sel" options={years}/>
+                    <div className="col-sm-5">
+
+                        <Select
+                            className="sel"
+                            options={region}
+                            onChange={(e)=>{
+                                console.log(e.value)
+                                setRegionSelect(e.value);
+                                handleVillage(e.value);
+                            }}
+                        />
                     </div>
                 </div>
 
-                <div className="row mt-4">
+                { vil && <div className="row mt-4">
                     <label htmlFor="localitatea" className="col-sm-2 col-form-label">Localitatea:</label>
-                    <div className="col-sm-4">
-                        <Select className="sel" options={years}/>
+                    <div className="col-sm-5">
+                        <Select className="sel" options={vil}
+                                onChange={(e)=>{
+                                    setVilSelect(e.value);
+                                }}
+                        />
                     </div>
-                </div>
+                </div>}
 
-                <div className="row mt-5 col-sm-4">
-                    <button type="button" className="btn btn-primary float-end">Afiseaza Codul IBAN</button>
+                { !vil && <div className="row mt-4">
+                    <label htmlFor="localitatea" className="col-sm-2 col-form-label">Localitatea:</label>
+                    <div className="col-sm-5">
+                        <Select className="sel" />
+                    </div>
+                </div>}
+
+                <div className="row mt-5 col-12">
+                    <button type="button" className="btn btn-primary d-block col-4 "
+                            onClick={handleCall}
+                    >Afiseaza Codul IBAN</button>
                 </div>
             </div>
 
-        </form>
-    </div>)
 
+        </form>
+        <div className="row mt-5 col-12">
+            <h2>{iban && iban.iban}</h2>
+        </div>
+    </div>
+};
 export {HomePage};
