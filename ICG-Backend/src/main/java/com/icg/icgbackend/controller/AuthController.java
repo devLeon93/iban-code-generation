@@ -1,11 +1,11 @@
 package com.icg.icgbackend.controller;
 
 import com.icg.icgbackend.dto.LoginRequest;
-import com.icg.icgbackend.dto.RegisterRequest;
-import com.icg.icgbackend.dto.UserDto;
+import com.icg.icgbackend.dto.SignupRequest;
 import com.icg.icgbackend.service.AuthService;
 import com.icg.icgbackend.util.ExceptionResponse;
-import com.icg.icgbackend.util.JWTSuccessAuthenticateResponse;
+import com.icg.icgbackend.util.JwtResponse;
+import com.icg.icgbackend.util.MessageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,22 +15,23 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(value = "/api/auth")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/login")
-    public ResponseEntity<JWTSuccessAuthenticateResponse> login(@RequestBody LoginRequest loginRequest){
+    @PostMapping("/signin")
+    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest){
         return ResponseEntity.ok(authService.authenticateUser(loginRequest));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<UserDto> register(@Valid @RequestBody RegisterRequest registrationRequest) {
-        return ResponseEntity.ok(authService.registerUser(registrationRequest));
+    @PostMapping("/signup")
+    public ResponseEntity<?> register(@Valid @RequestBody SignupRequest signupRequest) {
+        authService.registerUser(signupRequest);
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
     @ExceptionHandler(BadCredentialsException.class)

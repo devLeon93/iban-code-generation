@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react'
+import React, { useState, useEffect } from "react";
 import Select from 'react-select'
 import axios from "axios";
 import {map} from "react-bootstrap/ElementChildren";
 
-const HomePage = () => {
+import UserService from "../services/UserService";
 
+const Home = () => {
     const years = [...Array(22).keys()]
         .map((year,index)=>({ label: year + 2000, value: year + 2000 }))
 
@@ -167,4 +168,5 @@ const HomePage = () => {
         </div>
     </div>
 };
-export {HomePage};
+
+export default Home;

@@ -1,3 +1,3 @@
-INSERT INTO public.roles (id, role) VALUES (1, 'ADMIN');
-INSERT INTO public.roles (id, role) VALUES (2, 'OPERATOR');
-INSERT INTO public.roles (id, role) VALUES (3, 'OPERATOR_RAION');
+INSERT INTO public.roles (id, name) VALUES (1, 'ROLE_ADMIN');
+INSERT INTO public.roles (id, name) VALUES (2, 'ROLE_OPERATOR');
+INSERT INTO public.roles (id, name) VALUES (3, 'ROLE_OPERATOR_RAION');

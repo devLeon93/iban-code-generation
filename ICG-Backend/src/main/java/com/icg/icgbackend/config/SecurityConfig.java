@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/eco/**", "/api/locality/**","/api/iban/**").permitAll()
+                .antMatchers("/api/test/**").permitAll()
                 .anyRequest()
                 .authenticated();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

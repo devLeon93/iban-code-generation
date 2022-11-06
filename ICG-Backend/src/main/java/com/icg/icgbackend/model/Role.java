@@ -1,19 +1,41 @@
 package com.icg.icgbackend.model;
-
-import lombok.Data;
-
 import javax.persistence.*;
 
-@Data
+
 @Entity
 @Table(name = "roles")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private URole role;
+    @Column(length = 20)
+    private URole name;
+
+    public Role() {
+
+    }
+
+    public Role(URole name) {
+        this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public URole getName() {
+        return name;
+    }
+
+    public void setName(URole name) {
+        this.name = name;
+    }
+
 }

@@ -1,17 +1,17 @@
 package com.icg.icgbackend.service;
 
 import com.icg.icgbackend.dto.LoginRequest;
-import com.icg.icgbackend.dto.RegisterRequest;
-import com.icg.icgbackend.dto.UserDto;
-import com.icg.icgbackend.exception.UserExistException;
+import com.icg.icgbackend.dto.SignupRequest;
+
 import com.icg.icgbackend.model.Role;
 import com.icg.icgbackend.model.URole;
 import com.icg.icgbackend.model.User;
 import com.icg.icgbackend.repository.RoleRepository;
 import com.icg.icgbackend.repository.UserRepository;
 import com.icg.icgbackend.security.JWT.JWTTokenProvider;
-import com.icg.icgbackend.security.UserCustomDetail;
-import com.icg.icgbackend.util.JWTSuccessAuthenticateResponse;
+import com.icg.icgbackend.security.UserDetailsImpl;
+import com.icg.icgbackend.util.JwtResponse;
+import com.icg.icgbackend.util.MessageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -25,8 +25,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,41 +45,74 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public UserDto registerUser(RegisterRequest registerUser) {
-        Optional<User> userByUsername = userRepository.findUserByUsername(registerUser.getEmail());
-        if(userByUsername.isPresent()){
-            throw new UserExistException(
-                    "The user " + registerUser.getUsername() + " already exist. Please check credentials");
-
+    public void registerUser(SignupRequest signupRequest) {
+        if (userRepository.existsByUsername(signupRequest.getUsername())) {
+            throw new MessageResponse("Error: Username is already taken!");
         }
 
-        Role defaultRole = roleRepository.findByRole(URole.ADMIN);
-        User user = new User();
-        user.getRoles().add(defaultRole);
-        user.setUsername(registerUser.getUsername());
-        user.setEmail(registerUser.getEmail());
-        user.setPassword(bCryptPasswordEncoder.encode(registerUser.getPassword()));
-        LOG.info("Register User {}", registerUser.getEmail());
+        if (userRepository.existsByEmail(signupRequest.getEmail())) {
+            throw new MessageResponse("Error: Email is already in use!");
+        }
+
+        // Create new user's account
+        User user = new User(signupRequest.getUsername(),
+                signupRequest.getEmail(),
+                bCryptPasswordEncoder.encode(signupRequest.getPassword()));
+
+        Set<String> strRoles = signupRequest.getRole();
+        Set<Role> roles = new HashSet<>();
+
+        if (strRoles == null) {
+            Role userRole = roleRepository.findByName(URole.ROLE_OPERATOR)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(userRole);
+        } else {
+            strRoles.forEach(role -> {
+                switch (role) {
+                    case "admin":
+                        Role adminRole = roleRepository.findByName(URole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(adminRole);
+
+                        break;
+                    case "mod":
+                        Role modRole = roleRepository.findByName(URole.ROLE_OPERATOR_RAION)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(modRole);
+
+                        break;
+                    default:
+                        Role userRole = roleRepository.findByName(URole.ROLE_OPERATOR)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(userRole);
+                }
+            });
+        }
+
+        user.setRoles(roles);
         userRepository.save(user);
-        return UserDto.fromUser(user);
 
     }
 
     @Override
     @Transactional
-    public  JWTSuccessAuthenticateResponse authenticateUser(LoginRequest authenticateUser) {
+    public JwtResponse authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authenticateUser.getUsername(), authenticateUser.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtTokenProvider.generateToken(authentication);
+        String jwt = jwtTokenProvider.generateJwtToken(authentication);
 
-       /* UserCustomDetail userDetails = (UserCustomDetail) authentication.getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());*/
-        return new JWTSuccessAuthenticateResponse(
-                token
-        );
+                .collect(Collectors.toList());
+
+        return new JwtResponse(jwt,
+                userDetails.getId(),
+                userDetails.getUsername(),
+                userDetails.getEmail(),
+                roles);
+
     }
 }

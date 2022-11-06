@@ -1,13 +1,13 @@
 package com.icg.icgbackend.service;
 
 import com.icg.icgbackend.dto.LoginRequest;
-import com.icg.icgbackend.dto.RegisterRequest;
+import com.icg.icgbackend.dto.SignupRequest;
 import com.icg.icgbackend.dto.UserDto;
-import com.icg.icgbackend.util.JWTSuccessAuthenticateResponse;
+import com.icg.icgbackend.util.JwtResponse;
 
 public interface AuthService {
 
-    UserDto registerUser (RegisterRequest registerUser);
+    void registerUser (SignupRequest signupRequest);
 
-    JWTSuccessAuthenticateResponse authenticateUser(LoginRequest authenticateUser);
+    JwtResponse authenticateUser(LoginRequest loginRequest);
 }

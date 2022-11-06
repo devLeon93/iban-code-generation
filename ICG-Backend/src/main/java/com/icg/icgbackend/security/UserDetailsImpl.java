@@ -2,46 +2,52 @@ package com.icg.icgbackend.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.icg.icgbackend.model.User;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserCustomDetail implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
+    private static final long serialVersionUID = 1L;
 
-    private static final String ROLE_PREFIX = "ROLE_";
     private final Long id;
+
     private final String username;
+
     private final String email;
 
     @JsonIgnore
     private final String password;
-    @Setter
-    private List<GrantedAuthority> authorities = new ArrayList<>();
 
-    public static UserCustomDetail build(User user) {
-        UserCustomDetail userCustomDetail = new UserCustomDetail(user.getId(), user.getUsername(),
-                user.getEmail(), user.getPassword());
+    private final Collection<? extends GrantedAuthority> authorities;
+
+    public UserDetailsImpl(Long id, String username, String email, String password,
+                           Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.authorities = authorities;
+    }
+
+    public static UserDetailsImpl build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRole().name()))
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
-        userCustomDetail.setAuthorities(authorities);
-        return userCustomDetail;
+        return new UserDetailsImpl(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword(),
+                authorities);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.unmodifiableList(authorities);
+        return authorities;
     }
 
     public Long getId() {
@@ -81,4 +87,15 @@ public class UserCustomDetail implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        UserDetailsImpl user = (UserDetailsImpl) o;
+        return Objects.equals(id, user.id);
+    }
 }
+
