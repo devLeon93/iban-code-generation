@@ -3,8 +3,8 @@ package com.icg.icgbackend.util;
 import java.util.List;
 
 public class JwtResponse {
-    private String token;
     private String type = "Bearer";
+    private String token;
     private Long id;
     private String username;
     private String email;
