@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import logo from './logo.svg';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-
 import AuthService from "./services/AuthService";
-
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
@@ -12,8 +10,9 @@ import BoardUser from "./components/BoardUser";
 import BoardModerator from "./components/BoardModerator";
 import BoardAdmin from "./components/BoardAdmin";
 
-// import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
+import {Link} from "react-router-dom";
+import {Route, Routes} from "react-router";
 
 const App = () => {
     const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -25,7 +24,7 @@ const App = () => {
 
         if (user) {
             setCurrentUser(user);
-            setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
+            setShowModeratorBoard(user.roles.includes("ROLE_OPERATOR_RAION"));
             setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
         }
 
@@ -47,11 +46,12 @@ const App = () => {
 
     return (
         <div>
-            <nav className="navbar navbar-expand navbar-dark bg-dark p-4  ">
+            <nav className="navbar navbar-expand navbar-dark bg-dark p-2 align-items-center">
                 <Link to={"/"} className="navbar-brand">
-                    Generating IBAN code
+                    <img src={logo} className="App-logo" alt="logo" />
+                    IBAN Code Generator
                 </Link>
-                <div className="navbar-nav mr-auto">
+                <div className="navbar-nav mr-auto d-flex w-100 justify-content-lg-start ">
                     <li className="nav-item">
                         <Link to={"/home"} className="nav-link">
                             Home
@@ -59,25 +59,25 @@ const App = () => {
                     </li>
 
                     {showModeratorBoard && (
-                        <li className="nav-item">
-                            <Link to={"/mod"} className="nav-link">
-                                Moderator Board
+                        <li className="nav-item ">
+                            <Link to={"/operator-raion"} className="nav-link">
+                                Operator - Raion
                             </Link>
                         </li>
                     )}
 
                     {showAdminBoard && (
-                        <li className="nav-item">
+                        <li className="nav-item ">
                             <Link to={"/admin"} className="nav-link">
-                                Admin Board
+                                Admin Panel
                             </Link>
                         </li>
                     )}
 
                     {currentUser && (
-                        <li className="nav-item">
-                            <Link to={"/user"} className="nav-link">
-                                User
+                        <li className="nav-item  ">
+                            <Link to={"/operator"} className="nav-link">
+                                Operator
                             </Link>
                         </li>
                     )}
@@ -90,17 +90,17 @@ const App = () => {
                                 {currentUser.username}
                             </Link>
                         </li>
-                        <li className="nav-item">
+                        <li className="nav-item ">
                             <a href="/login" className="nav-link" onClick={logOut}>
                                 LogOut
                             </a>
                         </li>
                     </div>
                 ) : (
-                    <div className="navbar-nav ml-auto">
+                    <div className="navbar-nav ml-auto ">
                         <li className="nav-item">
                             <Link to={"/login"} className="nav-link">
-                                Login
+                                <button type="button" className="btn btn-success w-150">Login</button>
                             </Link>
                         </li>
                     </div>
@@ -109,17 +109,16 @@ const App = () => {
 
             <div className="container mt-3">
                 <Routes>
-                    <Route exact path={"/"} element={<Home />} />
-                    <Route exact path={"/home"} element={<Home />} />
-                    <Route exact path="/login" element={<Login />} />
-                    <Route exact path="/profile" element={<Profile />} />
-                    <Route path="/user" element={<BoardUser />} />
-                    <Route path="/mod" element={<BoardModerator />} />
-                    <Route path="/admin" element={<BoardAdmin />} />
+                    <Route path="/" element={<Home/>} />
+                    <Route path="/home" element={<Home/>} />
+                    <Route path="/login" element={<Login/>} />
+                    <Route path="/profile" element={<Profile/>} />
+                    <Route path="/operator" element={<BoardUser/>} />
+                    <Route path="/operator-raion" element={<BoardModerator/>} />
+                    <Route path="/admin" element={<BoardAdmin/>} />
                 </Routes>
             </div>
 
-            {/* <AuthVerify logOut={logOut}/> */}
         </div>
     );
 };

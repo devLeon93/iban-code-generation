@@ -1,21 +1,22 @@
 import axios from "axios";
+import authHeader from "./AuthHeader";
 
-const API_URL = "http://localhost:3000/api/test/";
+const API_URL = "http://localhost:8080/api/test/";
 
 const getPublicContent = () => {
     return axios.get(API_URL + "all");
 };
 
 const getUserBoard = () => {
-    return axios.get(API_URL + "user");
+    return axios.get(API_URL + "operator", { headers: authHeader() });
 };
 
 const getModeratorBoard = () => {
-    return axios.get(API_URL + "mod");
+    return axios.get(API_URL + "operator-raion", { headers: authHeader() });
 };
 
 const getAdminBoard = () => {
-    return axios.get(API_URL + "admin");
+    return axios.get(API_URL + "admin", { headers: authHeader() });
 };
 
 const UserService = {
@@ -23,6 +24,6 @@ const UserService = {
     getUserBoard,
     getModeratorBoard,
     getAdminBoard,
-}
+};
 
 export default UserService;
