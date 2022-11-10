@@ -4,8 +4,8 @@ import axios from "axios";
 import Select from "react-select";
 
 const Profile = () => {
-    const years = [...Array(22).keys()]
-        .map((year,index)=>({ label: year + 2000, value: year + 2000 }))
+    const years = [...Array(6).keys()]
+        .map((year,index)=>({ label: year + 2017, value: year + 2022 }))
 
     const [eco, setEco] = useState(null);
     const [region, setRegion] = useState(null);
@@ -158,11 +158,13 @@ const Profile = () => {
                     >Afiseaza Codul IBAN</button>
                 </div>
             </div>
-
-
         </form>
-        <div className="row mt-5 col-12">
-            <h2>{iban && iban.iban}</h2>
+        <div className="row  mt-5 ">
+            <div className="col-12">
+                <div className="alert alert-success col-3">
+                    <h5>{iban && iban.iban}</h5>
+                </div>
+            </div>
         </div>
     </div>
 };
