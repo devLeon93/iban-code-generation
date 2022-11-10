@@ -42,8 +42,8 @@ const App = () => {
         <div>
             <nav className="navbar navbar-expand navbar-dark bg-dark p-2 align-items-center">
                 <Link to={"/"} className="navbar-brand">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    IBAN Code Generator
+                    <img src="http://mf.gov.md/sites/default/files/01_logo_0.png" className="App-logo"/>
+                      <span style={{marginLeft:15}}> Ministerului Finanţelor</span>
                 </Link>
                 <div className="navbar-nav mr-auto d-flex w-100 justify-content-lg-start ">
 
