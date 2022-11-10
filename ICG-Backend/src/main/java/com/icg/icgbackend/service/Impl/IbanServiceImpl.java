@@ -1,9 +1,10 @@
-package com.icg.icgbackend.service;
+package com.icg.icgbackend.service.Impl;
 
 import com.icg.icgbackend.dto.IbanDto;
 import com.icg.icgbackend.mapper.IbanDtoMapper;
 import com.icg.icgbackend.model.Iban;
 import com.icg.icgbackend.repository.IbanRepository;
+import com.icg.icgbackend.service.IbanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

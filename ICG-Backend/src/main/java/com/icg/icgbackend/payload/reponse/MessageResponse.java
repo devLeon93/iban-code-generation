@@ -1,4 +1,4 @@
-package com.icg.icgbackend.util;
+package com.icg.icgbackend.payload.reponse;
 
 
 public class MessageResponse extends RuntimeException {

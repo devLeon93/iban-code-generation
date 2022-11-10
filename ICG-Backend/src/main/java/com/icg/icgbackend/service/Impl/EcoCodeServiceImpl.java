@@ -1,9 +1,10 @@
-package com.icg.icgbackend.service;
+package com.icg.icgbackend.service.Impl;
 
 import com.icg.icgbackend.dto.EcoCodeDto;
 import com.icg.icgbackend.mapper.EcoCodeDtoMapper;
 import com.icg.icgbackend.model.EcoCode;
 import com.icg.icgbackend.repository.EcoCodeRepository;
+import com.icg.icgbackend.service.EcoCodeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class EcoCodeServiceImpl implements EcoCodeService{
+public class EcoCodeServiceImpl implements EcoCodeService {
 
     private final EcoCodeDtoMapper ecoCodeDtoMapper;
     private final EcoCodeRepository ecoCodeRepository;

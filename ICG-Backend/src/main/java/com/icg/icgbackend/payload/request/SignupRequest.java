@@ -1,4 +1,5 @@
-package com.icg.icgbackend.dto;
+package com.icg.icgbackend.payload.request;
+
 
 import lombok.Data;
 
@@ -11,7 +12,7 @@ import java.util.Set;
 public class SignupRequest {
 
     @NotEmpty(message = "Please enter name")
-    @Size(min = 4, max = 20)
+    @Size(min = 3, max = 20)
     private String username;
 
     @NotEmpty(message = "Email shouldn't be empty")
@@ -25,3 +26,4 @@ public class SignupRequest {
     private String password;
 
 }
+

@@ -1,4 +1,4 @@
-package com.icg.icgbackend.util;
+package com.icg.icgbackend.payload.reponse;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

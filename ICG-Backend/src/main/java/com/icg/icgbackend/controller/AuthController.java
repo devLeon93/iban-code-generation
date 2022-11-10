@@ -1,11 +1,11 @@
 package com.icg.icgbackend.controller;
 
-import com.icg.icgbackend.dto.LoginRequest;
-import com.icg.icgbackend.dto.SignupRequest;
+import com.icg.icgbackend.payload.reponse.ExceptionResponse;
+import com.icg.icgbackend.payload.reponse.JwtResponse;
+import com.icg.icgbackend.payload.reponse.MessageResponse;
+import com.icg.icgbackend.payload.request.LoginRequest;
+import com.icg.icgbackend.payload.request.SignupRequest;
 import com.icg.icgbackend.service.AuthService;
-import com.icg.icgbackend.util.ExceptionResponse;
-import com.icg.icgbackend.util.JwtResponse;
-import com.icg.icgbackend.util.MessageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

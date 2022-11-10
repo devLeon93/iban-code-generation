@@ -1,17 +1,17 @@
-package com.icg.icgbackend.service;
-
-import com.icg.icgbackend.dto.LoginRequest;
-import com.icg.icgbackend.dto.SignupRequest;
+package com.icg.icgbackend.service.Impl;
 
 import com.icg.icgbackend.model.Role;
 import com.icg.icgbackend.model.URole;
 import com.icg.icgbackend.model.User;
+import com.icg.icgbackend.payload.reponse.JwtResponse;
+import com.icg.icgbackend.payload.reponse.MessageResponse;
+import com.icg.icgbackend.payload.request.LoginRequest;
+import com.icg.icgbackend.payload.request.SignupRequest;
 import com.icg.icgbackend.repository.RoleRepository;
 import com.icg.icgbackend.repository.UserRepository;
 import com.icg.icgbackend.security.JWT.JWTTokenProvider;
 import com.icg.icgbackend.security.UserDetailsImpl;
-import com.icg.icgbackend.util.JwtResponse;
-import com.icg.icgbackend.util.MessageResponse;
+import com.icg.icgbackend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
