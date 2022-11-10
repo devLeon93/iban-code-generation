@@ -11,7 +11,7 @@ import java.util.Set;
 public class SignupRequest {
 
     @NotEmpty(message = "Please enter name")
-    @Size(min = 3, max = 20)
+    @Size(min = 4, max = 20)
     private String username;
 
     @NotEmpty(message = "Email shouldn't be empty")
@@ -21,7 +21,7 @@ public class SignupRequest {
     private Set<String> role;
 
     @NotEmpty(message = "Password is required")
-    @Size(min = 6, max = 40)
+    @Size(min = 4, max = 40)
     private String password;
 
 }
