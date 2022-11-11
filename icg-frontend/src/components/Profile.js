@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
-import AuthService from "../services/AuthService";
+import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import Select from "react-select";
 
 const Profile = () => {
+
     const years = [...Array(6).keys()]
         .map((year,index)=>({ label: year + 2017, value: year + 2022 }))
 
@@ -58,8 +58,8 @@ const Profile = () => {
         return getEcoCodes(),getRegions()
     }, []);
 
-    const handleVillage =(code)=>{
-        if(code) {
+    const handleVillage =(code)=> {
+        if (code) {
             axios.get(`http://localhost:8080/api/locality/${code}`)
                 .then((res) => {
                     console.log(res.data)
@@ -68,7 +68,7 @@ const Profile = () => {
                             label: item.localityTitle
                         }))
                             .filter((vil) => !vil.label.startsWith("Raio"))
-                            .map((item)=>({
+                            .map((item) => ({
                                 value: item.value,
                                 label: `${item.value} - ${item.label}`
                             }))
@@ -77,7 +77,7 @@ const Profile = () => {
                 console.log(err)
             });
         }
-    }
+    };
 
 
 
@@ -93,13 +93,17 @@ const Profile = () => {
         }
     }
 
-    return <div className="container">
+    const handelAway = (e)=>{
+        setIban(null);
+    }
+
+    return <div className="container " onClick={handelAway}>
         <h3 className="col-md-15 text-center mt-5 mb-xxl-5">Generarea Codului IBAN</h3>
         <form>
-            <div className="form-group ">
+            <div className="form-group  ">
 
                 <div className="row">
-                    <label htmlFor="anul" className="col-sm-2 col-form-label">Anul:</label>
+                    <label htmlFor="anul" className="col-sm-2 col-form-label ">Anul:</label>
                     <div className="col-sm-5">
                         <Select className="sel" options={years}/>
                     </div>
@@ -145,25 +149,29 @@ const Profile = () => {
                     </div>
                 </div>}
 
-                { !vil && <div className="row mt-4">
+                { !vil && <div className="row mt-6">
                     <label htmlFor="localitatea" className="col-sm-2 col-form-label">Localitatea:</label>
                     <div className="col-sm-5">
                         <Select className="sel" />
                     </div>
                 </div>}
 
-                <div className="row mt-5 col-12">
-                    <button type="button" className="btn btn-primary d-block col-4 "
+                <div className="row mt-xl-5 col-8 mx-auto ">
+                    <button type="button" className="btn btn-primary d-block col-4 w-30"
                             onClick={handleCall}
                     >Afiseaza Codul IBAN</button>
                 </div>
             </div>
         </form>
         <div className="row  mt-5 ">
-            <div className="col-12">
-                <div className="alert alert-success col-3">
-                    <h5>{iban && iban.iban}</h5>
-                </div>
+            <div className="text-center ">
+                { iban && <div  className="alert alert-success d-flex " role="alert">
+                    <h5 style={{marginLeft:500}}>{iban && iban.iban}</h5>
+                    <button type="button" className="btn-close align-content-between" data-bs-dismiss="alert" aria-label="Close"  onClick={()=>{
+                        setIban(null);
+                    }
+                    }></button>
+                </div>}
             </div>
         </div>
     </div>

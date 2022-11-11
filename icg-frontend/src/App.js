@@ -6,10 +6,13 @@ import AuthService from "./services/AuthService";
 import Login from "./components/Login";
 import Profile from "./components/Profile";
 import BoardAdmin from "./components/BoardAdmin";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 import EventBus from "./common/EventBus";
 import {Link} from "react-router-dom";
 import {Route, Routes} from "react-router-dom";
+import {faSignInAlt, faSignOutAlt} from "@fortawesome/free-solid-svg-icons";
 
 const App = () => {
     const [showAdminBoard, setShowAdminBoard] = useState(false);
@@ -64,16 +67,16 @@ const App = () => {
                             </Link>
                         </li>
                         <li className="nav-item ">
-                            <a href="/login" className="nav-link" onClick={logOut}>
-                                LogOut
-                            </a>
+                            <Link to={"/login"} className="nav-link" onClick={logOut}>
+                                <FontAwesomeIcon icon={faSignOutAlt} />
+                            </Link>
                         </li>
                     </div>
                 ) : (
                     <div className="navbar-nav ml-auto ">
                         <li className="nav-item">
                             <Link to={"/login"} className="nav-link">
-                                <button type="button" className="btn btn-success w-150">Login</button>
+                                <FontAwesomeIcon icon={faSignInAlt}  />
                             </Link>
                         </li>
                     </div>
