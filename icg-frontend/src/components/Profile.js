@@ -138,7 +138,7 @@ const Profile = () => {
                     </div>
                 </div>
 
-                { vil && <div className="row mt-4">
+                { vil && <div className="row mt-4 ">
                     <label htmlFor="localitatea" className="col-sm-2 col-form-label">Localitatea:</label>
                     <div className="col-sm-5">
                         <Select className="sel" options={vil}
