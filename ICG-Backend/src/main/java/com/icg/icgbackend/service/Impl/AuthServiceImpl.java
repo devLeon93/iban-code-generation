@@ -1,5 +1,6 @@
 package com.icg.icgbackend.service.Impl;
 
+import com.icg.icgbackend.exception.UserNotFoundException;
 import com.icg.icgbackend.model.Role;
 import com.icg.icgbackend.model.URole;
 import com.icg.icgbackend.model.User;
@@ -97,22 +98,19 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password));
+        User user = userRepository.findByUsername(username).orElseThrow(() ->{
+                    log.error("User with username " + username + "was not found");
+                    return new UserNotFoundException("User with username " + username + "was not found");
+                }
+        );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtTokenProvider.generateJwtToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
-
-        return new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles);
+        String token = jwtTokenProvider.generateJwtToken(user);
+        return new JwtResponse(token);
 
     }
+
 }

@@ -18,12 +18,24 @@ const App = () => {
     const [showAdminBoard, setShowAdminBoard] = useState(false);
     const [currentUser, setCurrentUser] = useState(undefined);
 
+
+   const parseJwtToken = (token) =>  {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    }
+
     useEffect(() => {
         const user = AuthService.getCurrentUser();
-
         if (user) {
-            setCurrentUser(user);
-            setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+            const userDecode = parseJwtToken(user.token);
+            setCurrentUser(userDecode);
+            setShowAdminBoard(userDecode.role
+                .map(r=>r.authority)
+                .includes("ROLE_ADMIN"));
         }
 
         EventBus.on("logout", () => {
@@ -63,7 +75,7 @@ const App = () => {
                     <div className="navbar-nav ml-auto">
                         <li className="nav-item">
                             <Link to={"/profile"} className="nav-link">
-                                {currentUser.username}
+                                {currentUser.email}
                             </Link>
                         </li>
                         <li className="nav-item ">

@@ -9,7 +9,7 @@ const login = (username, password) => {
             password,
         })
         .then((response) => {
-            if (response.data.accessToken) {
+            if (response.data.token) {
                 localStorage.setItem("user", JSON.stringify(response.data));
             }
 
@@ -22,7 +22,7 @@ const logout = () => {
 };
 
 const getCurrentUser = () => {
-    return JSON.parse(localStorage.getItem("user"));
+    return  JSON.parse(localStorage.getItem('user'));
 };
 
 const AuthService = {

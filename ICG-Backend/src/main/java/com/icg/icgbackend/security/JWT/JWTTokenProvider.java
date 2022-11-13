@@ -1,6 +1,9 @@
 package com.icg.icgbackend.security.JWT;
 
 
+import com.icg.icgbackend.exception.UserNotFoundException;
+import com.icg.icgbackend.model.User;
+import com.icg.icgbackend.repository.UserRepository;
 import com.icg.icgbackend.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -8,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -18,18 +23,27 @@ import java.util.Date;
 public class JWTTokenProvider {
     private static final Logger logger = LoggerFactory.getLogger(JWTTokenProvider.class);
 
+
+    private final UserRepository userRepository;
+
     @Value("${test.app.jwtSecret}")
     private String jwtSecret;
 
     @Value("${test.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    public String generateJwtToken(Authentication authentication) {
+    public String generateJwtToken(User user) {
 
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        Claims claims = Jwts.claims().setSubject(user.getUsername());
+        claims.put("id",user.getId());
+        claims.put("email",user.getEmail());
+        claims.put("role",user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .collect(Collectors.toList()));
+
 
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
