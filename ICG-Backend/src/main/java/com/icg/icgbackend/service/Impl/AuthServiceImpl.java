@@ -39,61 +39,8 @@ public class AuthServiceImpl implements AuthService {
     public static final Logger LOG = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JWTTokenProvider jwtTokenProvider;
-
-    @Override
-    @Transactional
-    public void registerUser(SignupRequest signupRequest) {
-        if (userRepository.existsByUsername(signupRequest.getUsername())) {
-            throw new MessageResponse("Error: Username is already taken!");
-        }
-
-        if (userRepository.existsByEmail(signupRequest.getEmail())) {
-            throw new MessageResponse("Error: Email is already in use!");
-        }
-
-        // Create new user's account
-        User user = new User(signupRequest.getUsername(),
-                signupRequest.getEmail(),
-                bCryptPasswordEncoder.encode(signupRequest.getPassword()));
-
-        Set<String> strRoles = signupRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(URole.ROLE_OPERATOR)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(URole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-
-                        break;
-                    case "mod":
-                        Role modRole = roleRepository.findByName(URole.ROLE_OPERATOR_RAION)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(URole.ROLE_OPERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
-        }
-
-        user.setRoles(roles);
-        userRepository.save(user);
-
-    }
 
     @Override
     @Transactional
@@ -103,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password));
         User user = userRepository.findByUsername(username).orElseThrow(() ->{
-                    log.error("User with username " + username + "was not found");
+            LOG.error("User with username " + username + "was not found");
                     return new UserNotFoundException("User with username " + username + "was not found");
                 }
         );
