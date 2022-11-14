@@ -33,7 +33,7 @@ public class UserController {
         }
     }
 
-/*    @GetMapping
+    @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok( userService.getAllUsers());
     }
@@ -41,18 +41,18 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
-    }*/
+    }
 
-
+/*
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok( userRepository.findAll());
-    }
+    }*/
 
-    @GetMapping("/{id}")
+/*    @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(userRepository.findById(id).get());
-    }
+    }*/
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@RequestBody SignupRequest signupRequest,

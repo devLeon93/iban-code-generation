@@ -6,7 +6,7 @@ import Select from "react-select";
 export default function EditUser(props) {
 
     console.table(">>>>> EditUser", props)
-    const [roles, setRole] = useState(null);
+    const [role, setRole] = useState(null);
     const [roleSelect, setRoleSelect] = useState(null);
 
     let navigate = useNavigate();
@@ -89,13 +89,13 @@ export default function EditUser(props) {
                             <label htmlFor="codulEco" className="form-label">Roles:</label>
 
                             {
-                                user && console.log(user.roles[0])
+                                user && console.log(user.role[0])
                             }
                             <Select className="w-100"
-                                    options={roles}
+                                    options={role}
                                     value={{
-                                        value:user.roles[0].name,
-                                        label:user.roles[0].name
+                                        value:user.role[0].name,
+                                        label:user.role[0].name
                                     }
                                     }
                                     onChange={(e) => {

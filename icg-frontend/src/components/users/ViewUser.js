@@ -6,7 +6,7 @@ export default function ViewUser() {
     const [user, setUser] = useState({
         username: "",
         email: "",
-        role:""
+        role:[]
     });
 
     const { id } = useParams();
@@ -39,8 +39,8 @@ export default function ViewUser() {
                                     {user.email}
                                 </li>
                                 <li className="list-group-item">
-                                    <b>Role:</b>
-                                    {user.role}
+                                    <b>Role: </b>
+                                    {user.role.map(role=>role.name).join(" , ")}
                                 </li>
                             </ul>
                         </div>

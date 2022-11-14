@@ -26,5 +26,4 @@ public interface IbanRepository extends JpaRepository<Iban,Long> {
                                 @Param("lcdc") String lcdc,
                                 @Param("plcdc") String plcdc);
 
-
 }

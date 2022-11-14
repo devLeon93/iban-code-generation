@@ -65,7 +65,9 @@ const BoardAdmin = () => {
 
                             <td>{user.username}</td>
                             <td>{user.email}</td>
-                            <td>{user.role}</td>
+                            <td>{user.role.map((item) => {
+                                return <p> {item.name}</p>
+                            })}</td>
                             <td>
                                 <Link
                                     className="btn btn-primary mx-2"
