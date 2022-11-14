@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
+import { toast } from 'react-toastify';
 
 export default function EditUser(props) {
 
@@ -18,7 +19,6 @@ export default function EditUser(props) {
     const onInputChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
     };
-
 
 
     useEffect(() => {
@@ -41,13 +41,19 @@ export default function EditUser(props) {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        await axios.put(`http://localhost:8080/api/user/${id}`, user);
+        await axios.put(`http://localhost:8080/api/user/${id}`, user)
         navigate("/admin");
     };
 
     const loadUser = async () => {
-        const result = await axios.get(`http://localhost:8080/api/user/${id}`);
-        setUser(result.data);
+        axios.get(`http://localhost:8080/api/user/${id}`)
+            .then(res=>{
+                setUser(res.data);
+                toast.success(res)
+            })
+            .catch(err=>{
+                toast.error(err)
+            });
     };
     console.log(user);
 
@@ -88,20 +94,33 @@ export default function EditUser(props) {
                         <div className="mb-3">
                             <label htmlFor="codulEco" className="form-label">Roles:</label>
 
-                            {
+{/*                            {
                                 user && console.log(user.role[0])
-                            }
+                            }*/}
                             <Select className="w-100"
+                                    isMulti
                                     options={role}
-                                    value={{
-                                        value:user.role[0].name,
-                                        label:user.role[0].name
+                                    defaultValue={() => {
+                                        const userRoles = [];
+                                        user.role.map(r => {
+                                            return userRoles.push({
+                                                value: r.name,
+                                                label: r.name
+                                            });
+                                        });
+                                        return userRoles;
                                     }
                                     }
                                     onChange={(e) => {
-                                        console.log(e)
-                                        setUser(user)
-                                    }
+                                        console.log(e);
+                                        user.role = e.value;
+                                        let roles = [];
+                                        e.forEach((item) => {
+                                            roles.push(item.label);
+                                        })
+                                        setUser({...user, role: roles})
+                                        setRoleSelect(e.value)}
+
                                     }/>
                         </div>
 

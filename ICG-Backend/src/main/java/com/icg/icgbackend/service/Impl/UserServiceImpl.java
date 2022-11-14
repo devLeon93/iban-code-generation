@@ -57,7 +57,6 @@ public class UserServiceImpl implements UserService {
                     .get();
             roles.add(rolesUser);
         });
-
         user.setRoles(roles);
         user.setPassword(bCryptPasswordEncoder.encode(signupRequest.getPassword()));
         LOG.info("Creating User {}", signupRequest.getUsername());
@@ -70,12 +69,19 @@ public class UserServiceImpl implements UserService {
     public void editUser(Long id, SignupRequest signupRequest) {
         User userEdit = userRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException("User not found by id " + id));
-        var roleUser = roleRepository
-                .findAll()
-                .stream().filter(e -> e.getName().name().equals(signupRequest.getRole()))
-                .findFirst()
-                .get();
-        userEdit.setRoles(Set.of(roleUser));
+        List<String> stringList = new ArrayList<>(signupRequest.getRole());
+        Set<Role> roles = new HashSet<>();
+
+        stringList.forEach(item -> {
+            var rolesUser = roleRepository
+                    .findAll()
+                    .stream().filter(e -> e.getName().name().equals(item))
+                    .findFirst()
+                    .get();
+            roles.add(rolesUser);
+        });
+        
+        userEdit.setRoles(roles);
         userEdit.setUsername(signupRequest.getUsername());
         userEdit.setEmail(signupRequest.getEmail());
         LOG.info("Updating User  {}", " id = " + userEdit.getId());

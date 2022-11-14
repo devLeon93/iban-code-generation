@@ -21,8 +21,6 @@ public class SignupRequest {
 
     private Set<String> role;
 
-   // private String role;
-
     @NotEmpty(message = "Password is required")
     @Size(min = 4, max = 40)
     private String password;

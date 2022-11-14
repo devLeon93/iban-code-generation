@@ -57,11 +57,12 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@RequestBody SignupRequest signupRequest,
                                         @PathVariable Long id) {
-
-        var user = userRepository.findById(id).get();
-        user.setEmail(signupRequest.getEmail());
-        user.setUsername(signupRequest.getUsername());
-        return ResponseEntity.ok( userRepository.save(user));
+        try {
+            userService.editUser(id,signupRequest);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @DeleteMapping("/{id}")

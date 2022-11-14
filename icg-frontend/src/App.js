@@ -17,6 +17,10 @@ import AddUser from "./components/users/AddUser";
 import EditUser from "./components/users/EditUser";
 import ViewUser from "./components/users/ViewUser";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const App = () => {
     const [showAdminBoard, setShowAdminBoard] = useState(false);
     const [currentUser, setCurrentUser] = useState(undefined);
@@ -109,6 +113,21 @@ const App = () => {
                     <Route exact path="/viewuser/:id" element={<ViewUser />} />
                 </Routes>
             </div>
+{/*            <ToastContainer
+                position="top-right"
+                autoClose={500}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+             Same as
+            <ToastContainer />*/}
+            <ToastContainer />
         </div>
     );
 };
