@@ -9,8 +9,8 @@ export default function AddUser() {
     const [user, setUser] = useState({
         username: "",
         email: "",
-        role: "",
-        password: ""
+        password: "",
+        role: [],
     });
 
     const {username, email, password} = user;
@@ -46,6 +46,8 @@ export default function AddUser() {
     const onSubmit = async (e) => {
         e.preventDefault();
 
+
+        console.log(user)
         await axios.post("http://localhost:8080/api/user", user);
         navigate("/admin");
     };
@@ -103,10 +105,16 @@ export default function AddUser() {
                         <div className="mb-3">
                             <label htmlFor="codulEco" className="form-label">Roles:</label>
                             <Select className="w-100"
+                                    isMulti
                                     options={role}
                                     onChange={(e) => {
+                                        console.log(e);
                                         user.role = e.value;
-                                        setUser(user)
+                                        let roles = [];
+                                        e.forEach((item) => {
+                                            roles.push(item.label);
+                                        })
+                                        setUser({...user, role: roles})
                                         setRoleSelect(e.value)}
                                     }/>
                         </div>

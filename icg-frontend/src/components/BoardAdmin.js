@@ -66,7 +66,7 @@ const BoardAdmin = () => {
                             <td>{user.username}</td>
                             <td>{user.email}</td>
                             <td>{user.role.map((item) => {
-                                return <p> {item.name}</p>
+                                return <p> [{item.name}]</p>
                             })}</td>
                             <td>
                                 <Link

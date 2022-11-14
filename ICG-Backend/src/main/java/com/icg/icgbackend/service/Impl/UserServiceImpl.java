@@ -19,9 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,11 +36,10 @@ public class UserServiceImpl implements UserService {
 
     public static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
-
     @Override
     public void createUser(SignupRequest signupRequest) {
         Optional<User> userByUsername = userRepository.findByUsername(signupRequest.getUsername());
-        if(userByUsername.isPresent()){
+        if (userByUsername.isPresent()) {
             throw new UserExistException(
                     "The user " + signupRequest.getUsername() + " already exist. Please check credentials");
 
@@ -50,27 +47,32 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(signupRequest.getUsername());
         user.setEmail(signupRequest.getEmail());
-        var rolesUser = roleRepository
-                .findAll()
-                .stream().filter(e->e.getName().name().equals(signupRequest.getRole()))
-                .findFirst()
-                .get();
-        user.setRoles(Set.of(rolesUser));
+        List<String> lstRoles = new ArrayList<>(signupRequest.getRole());
+        Set<Role> roles = new HashSet<>();
+        lstRoles.forEach(item -> {
+            var rolesUser = roleRepository
+                    .findAll()
+                    .stream().filter(e -> e.getName().name().equals(item))
+                    .findFirst()
+                    .get();
+            roles.add(rolesUser);
+        });
+
+        user.setRoles(roles);
         user.setPassword(bCryptPasswordEncoder.encode(signupRequest.getPassword()));
         LOG.info("Creating User {}", signupRequest.getUsername());
         userRepository.save(user);
 
     }
 
-
     //TODO: Must be refactoring
     @Override
     public void editUser(Long id, SignupRequest signupRequest) {
         User userEdit = userRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException("User not found by id " + id));
-        var roleUser =roleRepository
+        var roleUser = roleRepository
                 .findAll()
-                .stream().filter(e->e.getName().name().equals(signupRequest.getRole()))
+                .stream().filter(e -> e.getName().name().equals(signupRequest.getRole()))
                 .findFirst()
                 .get();
         userEdit.setRoles(Set.of(roleUser));

@@ -19,9 +19,9 @@ public class SignupRequest {
     @Email(message = "Email should be valid")
     private String email;
 
-   // private Set<String> role;
+    private Set<String> role;
 
-    private String role;
+   // private String role;
 
     @NotEmpty(message = "Password is required")
     @Size(min = 4, max = 40)
