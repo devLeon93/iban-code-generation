@@ -23,13 +23,13 @@ export default function ViewUser() {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
+                <div className="col-md-4 offset-md-4 border rounded p-4 mt-5 shadow">
                     <h2 className="text-center m-4">User Details</h2>
 
                     <div className="card">
                         <div className="card-header">
-                            Details of user id : {user.id}
-                            <ul className="list-group list-group-flush">
+                            <h5>Details of user id : {user.id}</h5>
+                            <ul className="list-group list-group">
                                 <li className="list-group-item">
                                     <b>Username: </b>
                                     {user.username}
@@ -45,9 +45,11 @@ export default function ViewUser() {
                             </ul>
                         </div>
                     </div>
-                    <Link className="btn btn-primary my-2" to={"/admin"}>
-                        Back to Admin
-                    </Link>
+                    <div className="d-flex justify-content-center">
+                        <Link className="btn btn-primary  d-flex justify-content-center" to={"/admin"} >
+                            Back to Admin Panel
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

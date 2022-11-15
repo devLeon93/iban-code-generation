@@ -55,7 +55,6 @@ export default function AddUser() {
     useEffect(() => {
         axios.get("http://localhost:8080/api/user/roles")
             .then((response) => {
-                console.log("response ", response.data);
                 setRole(response.data
                     .map(item => ({
                         value: item.name,
@@ -70,7 +69,7 @@ export default function AddUser() {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-md-4 offset-md-3 border rounded p-4 mt-2 shadow">
+                <div className="col-md-4 offset-md-4 border rounded p-4 mt-5 shadow">
                     <h2 className="text-center m-4">Register User</h2>
 
                     <form onSubmit={(e) => onSubmit(e)}>
@@ -108,7 +107,6 @@ export default function AddUser() {
                                     isMulti
                                     options={role}
                                     onChange={(e) => {
-                                        console.log(e);
                                         user.role = e.value;
                                         let roles = [];
                                         e.forEach((item) => {
@@ -137,13 +135,14 @@ export default function AddUser() {
                             </div>
                         </div>
 
-
-                        <button type="submit" className="btn btn-primary">
-                            Submit
-                        </button>
-                        <Link className="btn btn-danger mx-2" to="/admin">
-                            Cancel
-                        </Link>
+                        <div className="d-flex justify-content-center">
+                            <button type="submit" className="btn btn-primary">
+                                Create
+                            </button>
+                            <Link className="btn btn-danger mx-2" to="/admin">
+                                Cancel
+                            </Link>
+                        </div>
                     </form>
                 </div>
             </div>

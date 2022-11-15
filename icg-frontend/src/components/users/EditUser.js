@@ -4,9 +4,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
 import { toast } from 'react-toastify';
 
-export default function EditUser(props) {
+export default function EditUser() {
 
-    console.table(">>>>> EditUser", props)
     const [role, setRole] = useState(null);
     const [roleSelect, setRoleSelect] = useState(null);
 
@@ -20,11 +19,9 @@ export default function EditUser(props) {
         setUser({ ...user, [e.target.name]: e.target.value });
     };
 
-
     useEffect(() => {
         axios.get("http://localhost:8080/api/user/roles")
             .then((response) => {
-                console.log("response ", response.data);
                 setRole(response.data
                     .map(item => ({
                         value: item.name,
@@ -36,8 +33,10 @@ export default function EditUser(props) {
     }, [])
 
     useEffect(() => {
-        loadUser();
+       loadUser();
     }, []);
+
+
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -49,24 +48,23 @@ export default function EditUser(props) {
         axios.get(`http://localhost:8080/api/user/${id}`)
             .then(res=>{
                 setUser(res.data);
-                toast.success(res)
             })
             .catch(err=>{
                 toast.error(err)
             });
     };
-    console.log(user);
+
 
     return (
         <div className="container">
             <div className="row">
-                <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
+                <div className="col-md-4 offset-md-4 border rounded p-4 mt-5 shadow">
                     <h2 className="text-center m-4">Edit User</h2>
 
                     {user && <form onSubmit={(e) => onSubmit(e)}>
                         <div className="mb-3">
                             <label htmlFor="Username" className="form-label">
-                                Username
+                                Username:
                             </label>
                             <input
                                 type={"text"}
@@ -79,7 +77,7 @@ export default function EditUser(props) {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="Email" className="form-label">
-                                E-mail
+                                E-mail:
                             </label>
                             <input
                                 type={"text"}
@@ -123,13 +121,17 @@ export default function EditUser(props) {
 
                                     }/>
                         </div>
+                        <div className="d-flex justify-content-center">
+                            <button type="submit" className="btn btn-primary">
+                                Update
 
-                        <button type="submit" className="btn btn-outline-primary">
-                            Submit
-                        </button>
-                        <Link className="btn btn-outline-danger mx-2" to="/admin">
-                            Cancel
-                        </Link>
+                            </button>
+                            <Link className="btn btn-danger mx-2" to="/admin">
+                                Cancel
+                            </Link>
+                        </div>
+
+
                     </form>}
                 </div>
             </div>
