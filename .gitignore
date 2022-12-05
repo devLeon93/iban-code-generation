@@ -1,2 +1,4 @@
-.idea
-.jpb
+# file: ~/.gitignore_global
+
+.idea/
+.jpb/
