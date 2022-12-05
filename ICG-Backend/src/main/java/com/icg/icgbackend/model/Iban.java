@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -26,11 +25,5 @@ public class Iban extends BaseEntity {
 
     @Column(name = "iban",nullable = false)
     private String iban;
-
-/*    @OneToOne(fetch = FetchType.LAZY)
-    private EcoCode ecoCode;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Locality locality;*/
 
 }

@@ -1,0 +1,21 @@
+spring.jpa:
+  database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+  show-sql: true
+spring.datasource:
+  url: jdbc:postgresql://localhost:5432/testdb
+  username: gentest
+  password: pass
+  driver-class-name: org.postgresql.Driver
+server:
+  port: 8080
+
+security:
+  jwt:
+    token:
+      secret-key: RandomSecretKey
+      expire-length: 86400000
+
+spring:
+  mvc:
+    path match:
+      matching-strategy: "ANT_PATH_MATCHER"

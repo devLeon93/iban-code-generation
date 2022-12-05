@@ -1,7 +1,6 @@
 package com.icg.icgbackend.controller;
 
 import com.icg.icgbackend.dto.LocalityDto;
-import com.icg.icgbackend.model.Locality;
 import com.icg.icgbackend.service.LocalityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,13 +26,6 @@ public class LocalityController {
         List<LocalityDto> localityDTOList = localityService.findAllLocalities();
         return new ResponseEntity<>(localityDTOList, HttpStatus.OK);
     }
-
-   /* @GetMapping("/regions")
-    public ResponseEntity<List<LocalityDto>> getRegions(){
-        List<LocalityDto> regions = localityService.findRegions();
-        return new ResponseEntity<>(regions,HttpStatus.OK);
-    }*/
-
     @GetMapping("/regions")
     public ResponseEntity<List<LocalityDto>> getRegions() {
 

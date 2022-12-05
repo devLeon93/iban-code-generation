@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import logo from './logo.svg';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -6,7 +6,7 @@ import AuthService from "./services/AuthService";
 import Login from "./components/Login";
 import Profile from "./components/Profile";
 import BoardAdmin from "./components/BoardAdmin";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 
 import EventBus from "./common/EventBus";
@@ -17,7 +17,7 @@ import AddUser from "./components/users/AddUser";
 import EditUser from "./components/users/EditUser";
 import ViewUser from "./components/users/ViewUser";
 
-import { ToastContainer, toast } from 'react-toastify';
+import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -26,10 +26,10 @@ const App = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
 
 
-   const parseJwtToken = (token) =>  {
+    const parseJwtToken = (token) => {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
         return JSON.parse(jsonPayload);
@@ -41,7 +41,7 @@ const App = () => {
             const userDecode = parseJwtToken(user.token);
             setCurrentUser(userDecode);
             setShowAdminBoard(userDecode.role
-                .map(r=>r.authority)
+                .map(r => r.authority)
                 .includes("ROLE_ADMIN"));
         }
 
@@ -64,8 +64,8 @@ const App = () => {
         <div>
             <nav className="navbar navbar-expand navbar-dark bg-dark p-2 align-items-center">
                 <Link to={"/"} className="navbar-brand">
-                    <img src="http://mf.gov.md/sites/default/files/01_logo_0.png" className="App-logo"/>
-                      <span style={{marginLeft:15}}> Ministerul Finanțelor</span>
+                    <img src="https://cdn-icons-png.flaticon.com/512/4930/4930607.png" className="App-logo"/>
+                    <span style={{marginLeft: 15}}> IBAN Code </span>
                 </Link>
                 <div className="navbar-nav mr-auto d-flex w-100 justify-content-lg-start ">
 
@@ -87,7 +87,7 @@ const App = () => {
                         </li>
                         <li className="nav-item ">
                             <Link to={"/login"} className="nav-link" onClick={logOut}>
-                                <FontAwesomeIcon icon={faSignOutAlt} />
+                                <FontAwesomeIcon icon={faSignOutAlt}/>
                             </Link>
                         </li>
                     </div>
@@ -95,7 +95,7 @@ const App = () => {
                     <div className="navbar-nav ml-auto ">
                         <li className="nav-item">
                             <Link to={"/login"} className="nav-link">
-                                <FontAwesomeIcon icon={faSignInAlt}  />
+                                <FontAwesomeIcon icon={faSignInAlt}/>
                             </Link>
                         </li>
                     </div>
@@ -104,30 +104,19 @@ const App = () => {
 
             <div className="container mt-3">
                 <Routes>
-                    <Route path="/" element={<Login/>} />
-                    <Route path="/login" element={<Login/>} />
-                    <Route path="/profile" element={<Profile/>} />
-                    <Route path="/admin" element={<BoardAdmin/>} />
-                    <Route exact path="/adduser" element={<AddUser />} />
-                    <Route exact path="/edituser/:id" element={<EditUser />} />
-                    <Route exact path="/viewuser/:id" element={<ViewUser />} />
+                    <Route path="/" element={<Profile/>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/profile" element={<Profile/>}/>
+                    <Route path="/admin" element={<BoardAdmin/>}/>
+                    <Route exact path="/adduser" element={<AddUser/>}/>
+                    <Route exact path="/edituser/:id" element={<EditUser/>}/>
+                    <Route exact path="/viewuser/:id" element={<ViewUser/>}/>
                 </Routes>
             </div>
-{/*            <ToastContainer
-                position="top-right"
-                autoClose={500}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
-             Same as
-            <ToastContainer />*/}
-            <ToastContainer />
+            {
+
+            }
+            <ToastContainer/>
         </div>
     );
 };

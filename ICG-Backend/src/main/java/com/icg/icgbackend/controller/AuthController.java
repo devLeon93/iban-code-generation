@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+
 import java.time.LocalDateTime;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -25,12 +25,6 @@ public class AuthController {
     public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest){
         return ResponseEntity.ok(authService.authenticateUser(loginRequest));
     }
-
-/*    @PostMapping("/signup")
-    public ResponseEntity<?> register(@Valid @RequestBody SignupRequest signupRequest) {
-        authService.registerUser(signupRequest);
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-    }*/
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ExceptionResponse> customException(BadCredentialsException ex) {

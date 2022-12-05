@@ -1,16 +1,14 @@
 package com.icg.icgbackend.security.JWT;
 
 
-import com.icg.icgbackend.exception.UserNotFoundException;
+
 import com.icg.icgbackend.model.User;
 import com.icg.icgbackend.repository.UserRepository;
-import com.icg.icgbackend.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -23,13 +21,10 @@ import java.util.stream.Collectors;
 public class JWTTokenProvider {
     private static final Logger logger = LoggerFactory.getLogger(JWTTokenProvider.class);
 
-
-    private final UserRepository userRepository;
-
-    @Value("${test.app.jwtSecret}")
+    @Value("${security.jwt.token.secret-key:secret-key}")
     private String jwtSecret;
 
-    @Value("${test.app.jwtExpirationMs}")
+    @Value("${security.jwt.token.expire-length:86400000}")
     private int jwtExpirationMs;
 
     public String generateJwtToken(User user) {

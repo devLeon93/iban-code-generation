@@ -2,7 +2,6 @@ package com.icg.icgbackend.controller;
 
 import com.icg.icgbackend.dto.RoleDto;
 import com.icg.icgbackend.dto.UserDto;
-import com.icg.icgbackend.model.User;
 import com.icg.icgbackend.payload.request.SignupRequest;
 import com.icg.icgbackend.repository.UserRepository;
 import com.icg.icgbackend.service.UserService;
@@ -11,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+
 import java.util.List;
 
 @RestController
@@ -22,7 +21,6 @@ public class UserController {
 
     private final UserService userService;
 
-    private final UserRepository userRepository;
     @PostMapping
     public ResponseEntity<?> newUser(@RequestBody SignupRequest signupRequest) {
         try {
@@ -43,16 +41,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-/*
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok( userRepository.findAll());
-    }*/
-
-/*    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(userRepository.findById(id).get());
-    }*/
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@RequestBody SignupRequest signupRequest,

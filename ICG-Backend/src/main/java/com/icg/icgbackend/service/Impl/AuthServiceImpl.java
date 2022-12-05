@@ -1,17 +1,11 @@
 package com.icg.icgbackend.service.Impl;
 
 import com.icg.icgbackend.exception.UserNotFoundException;
-import com.icg.icgbackend.model.Role;
-import com.icg.icgbackend.model.URole;
 import com.icg.icgbackend.model.User;
 import com.icg.icgbackend.payload.reponse.JwtResponse;
-import com.icg.icgbackend.payload.reponse.MessageResponse;
 import com.icg.icgbackend.payload.request.LoginRequest;
-import com.icg.icgbackend.payload.request.SignupRequest;
-import com.icg.icgbackend.repository.RoleRepository;
 import com.icg.icgbackend.repository.UserRepository;
 import com.icg.icgbackend.security.JWT.JWTTokenProvider;
-import com.icg.icgbackend.security.UserDetailsImpl;
 import com.icg.icgbackend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,17 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

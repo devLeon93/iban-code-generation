@@ -3,5 +3,9 @@
   <component name="JpaBuddyIdeaProjectConfig">
     <option name="defaultUnitInitialized" value="true" />
     <option name="renamerInitialized" value="true" />
+    <option name="sourceModelValue" value="Default" />
+    <option name="targetDbValue" value="0c45440a-14c1-4e16-957d-520161caa673" />
+    <option name="reverseEngineeringLastDbConnectionId" value="0c45440a-14c1-4e16-957d-520161caa673" />
+    <option name="reLastEntityCreationPackage" value="ICG-Backend/src/main/java/com/icg/icgbackend" />
   </component>
 </project>

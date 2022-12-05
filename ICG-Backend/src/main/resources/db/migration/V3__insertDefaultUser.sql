@@ -1,0 +1,1 @@
+INSERT INTO users (id,username,email,password,created_at,modified_at) VALUES (1,'admin','admin@gmail.com','$2a$12$ODDS.tRyN4X7MS1YPOBhZ.mDCWX0AatsxDnQYp4E4zYcRhE6ZTnF6','2022-12-05 12:00:07.000000',null);
